@@ -1,0 +1,2 @@
+D:\Files\Computer Science\C++\File-Management-System\testForGit\Debug\testForGit.exe
+D:\Files\Computer Science\C++\File-Management-System\testForGit\Debug\testForGit.pdb
