@@ -17,17 +17,18 @@ private:
 	NAME_CONFLICT_RESOLUTION nameConflictResolution;
 	std::filesystem::path pathFrom;
 	std::filesystem::path pathTo;
-public:
-	Copy(std::filesystem::path&);
 
 	std::string determineTargetDirectory();
 	COPY_ITEMS determineCopyItems();
 	COPY_SELECTIVITY determineCopySelectivity();
 	NAME_CONFLICT_RESOLUTION determineNameConflictResolution();
-	
+
 	void copy();
 	std::deque<int> selectFiles();
 	void displayFiles(std::vector<int>&, std::deque<int>&, std::ostringstream&);
+
+public:
+	Copy(std::filesystem::path&);
 };
 #endif
 
