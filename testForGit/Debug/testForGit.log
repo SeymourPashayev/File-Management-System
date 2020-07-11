@@ -1,8 +1,10 @@
 ﻿  Source.cpp
-C:\Users\Raul\source\repos\File-Management-System\testForGit\Source.cpp(191,32): warning C4244: 'argument': conversion from '__int64' to 'const _Ty', possible loss of data
+  Copy.cpp
+C:\Users\Raul\source\repos\File-Management-System\testForGit\src\Copy.cpp(99,32): warning C4244: 'argument': conversion from '__int64' to 'const _Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Raul\source\repos\File-Management-System\testForGit\Source.cpp(217,53): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Raul\source\repos\File-Management-System\testForGit\src\Copy.cpp(125,53): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   testForGit.vcxproj -> C:\Users\Raul\source\repos\File-Management-System\testForGit\Debug\testForGit.exe
