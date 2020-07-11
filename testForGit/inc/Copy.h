@@ -23,12 +23,12 @@ private:
 	COPY_SELECTIVITY determineCopySelectivity();
 	NAME_CONFLICT_RESOLUTION determineNameConflictResolution();
 
-	void copy();
 	std::deque<int> selectFiles();
 	void displayFiles(std::vector<int>&, std::deque<int>&, std::ostringstream&);
 
 public:
 	Copy(std::filesystem::path&);
+	void copy();
 };
 #endif
 
