@@ -18,7 +18,7 @@ private:
 	std::filesystem::path pathFrom;
 	std::filesystem::path pathTo;
 
-	std::string determineTargetDirectory();
+	std::filesystem::path determineTargetDirectory();
 	COPY_ITEMS determineCopyItems();
 	COPY_SELECTIVITY determineCopySelectivity();
 	NAME_CONFLICT_RESOLUTION determineNameConflictResolution();
