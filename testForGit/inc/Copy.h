@@ -23,8 +23,8 @@ private:
 	COPY_SELECTIVITY determineCopySelectivity();
 	NAME_CONFLICT_RESOLUTION determineNameConflictResolution();
 
-	std::deque<int> selectItems();
-	void displayItems(std::vector<int>&, std::deque<int>&, std::ostringstream&);
+	std::deque<long long> selectItems();
+	void displayItems(std::vector<long long>&, std::deque<long long>&, std::ostringstream&);
 
 	void copyFiles(std::filesystem::copy_options&);
 	void copyDirectories(std::filesystem::copy_options&);

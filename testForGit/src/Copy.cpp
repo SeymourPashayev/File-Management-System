@@ -52,7 +52,7 @@ void Copy::copyFiles(std::filesystem::copy_options& cpyOpt) {
     }
 
     case Copy::COPY_SELECTIVITY::CUSTOM: {
-        std::deque<int> selectedFiles{ selectItems() };
+        std::deque<long long> selectedFiles{ selectItems() };
         long long count{ 1 };
 
         for (auto& dirEntry : std::filesystem::directory_iterator{ pathFrom }) {
@@ -78,7 +78,7 @@ void Copy::copyDirectories(std::filesystem::copy_options& cpyOpt) {
     }
 
     case Copy::COPY_SELECTIVITY::CUSTOM: { 
-        std::deque<int> selectedDirectories{ selectItems() };
+        std::deque<long long> selectedDirectories{ selectItems() };
         long long count{ 1 };
 
         for (std::filesystem::recursive_directory_iterator next{ pathFrom }, end; next != end; ++next) {
@@ -118,9 +118,9 @@ void Copy::copyDirectories(std::filesystem::copy_options& cpyOpt) {
     }
 }
 
-std::deque<int> Copy::selectItems() {
-    std::deque<int> selectedFiles;
-    std::vector<int> allFiles;
+std::deque<long long> Copy::selectItems() {
+    std::deque<long long> selectedFiles;
+    std::vector<long long> allFiles;
 
     std::ostringstream itemLstOutput;
     long long count{ 1 };
@@ -150,13 +150,13 @@ std::deque<int> Copy::selectItems() {
     return selectedFiles;
 }
 
-void Copy::displayItems(std::vector<int>& allFiles, std::deque<int>& selectedFiles, std::ostringstream& itemLstOutput) {
+void Copy::displayItems(std::vector<long long>& allFiles, std::deque<long long>& selectedFiles, std::ostringstream& itemLstOutput) {
     std::cout << std::endl << itemLstOutput.str();
     std::cout << std::endl << "From the list above, enter the IDs of the items you would like to copy." << std::endl;
     std::cout << "To terminate, CTRL + z" << std::endl;
 
-    int selectedID;
-    int selectionCount{ 0 };
+    long long selectedID;
+    unsigned long long selectionCount{ 0 };
 
     while (std::cin >> selectedID && selectionCount < allFiles.size()) {
         if (!std::cin.good()) {
