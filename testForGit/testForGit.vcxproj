@@ -147,9 +147,11 @@
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="src\Copy.cpp" />
+    <ClCompile Include="src\Delete.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Copy.h" />
+    <ClInclude Include="inc\Delete.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

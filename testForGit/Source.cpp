@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include "Copy.h"
+#include "Delete.h"
 
 enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, SORT, FIND, END };
 
@@ -28,6 +29,8 @@ int main() {
         }
 
         case CHOICE::DELETE: {
+            Delete deleteObj{ pathFrom };
+            deleteObj.deletion();
             break;
         }
 

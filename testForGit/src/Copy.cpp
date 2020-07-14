@@ -155,10 +155,10 @@ void Copy::displayItems(std::vector<long long>& allFiles, std::deque<long long>&
     std::cout << std::endl << "From the list above, enter the IDs of the items you would like to copy." << std::endl;
     std::cout << "To terminate, CTRL + z" << std::endl;
 
-    long long selectedID;
+    long long selectedID{ 0 };
     unsigned long long selectionCount{ 0 };
 
-    while (std::cin >> selectedID && selectionCount < allFiles.size()) {
+    while ((std::cin >> selectedID || !std::cin.eof()) && selectionCount < allFiles.size() ) {
         if (!std::cin.good()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
