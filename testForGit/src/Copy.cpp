@@ -25,7 +25,8 @@ Copy::Copy(std::filesystem::path& pathFrom) {
 
 void Copy::copy() {
     std::filesystem::copy_options cpyOpt{ std::filesystem::copy_options::skip_existing };
-    cpyOpt = (nameConflictResolution == NAME_CONFLICT_RESOLUTION::KEEP ? cpyOpt : std::filesystem::copy_options::overwrite_existing);
+    cpyOpt = (nameConflictResolution == NAME_CONFLICT_RESOLUTION::KEEP ? cpyOpt :
+        std::filesystem::copy_options::overwrite_existing);
 
     switch (copyItems) {
 

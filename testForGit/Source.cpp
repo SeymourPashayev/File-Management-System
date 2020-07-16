@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 #include "Copy.h"
+#include "Rename.h"
 
 int menu();
 
@@ -26,6 +27,8 @@ int main() {
         }
 
         case CHOICE::RENAME: {
+            Rename renameObj{ pathFrom };
+            renameObj.rename();
             break;
         }
 
@@ -70,9 +73,14 @@ int menu() {
 
     int choice;
     std::cin >> choice;
-
-    while (choice < 1 || choice > 8) {
-        std::cerr << "Invalid input. Enter an integer 1-8 ." << std::endl;
+    
+    while ( /*std::isdigit(choice) &&*/ (choice < 1 || choice > 8)) {
+        std::cerr << "Invalid input. Enter an integer 1-8." << std::endl;
+        // FIXME: The code won't ask for new input after printing that the entered value is wrong. Creates an infinite loop.
+        // Update: That only happens with input in the string format. It works fine for integers out of range
+        // Update: Tried using while (std::isdigit(choice) && (choice < 1 || choice > 8)){...} caused error. Even tried putting the std::isdigit(choice)
+        // in a separate if statement. Still no luck.
+        std::cin >> choice;
     }
 
     return choice;
