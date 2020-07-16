@@ -11,8 +11,8 @@ Rename::Rename(std::filesystem::path& pathTo) {
 	//this->keepOrigText = determineKeepOrigText();
 	this->renameStyle = determineRenameStyle();
 	this->keepOrigText = determineKeepOrigText();
-	if (!keepOrigText) {
-		this->renameTo = determineAddNewName();
+	if (!keepOrigText) { //BY RAUL: You probably changed enum class to bool to easily control this branching. 
+		this->renameTo = determineAddNewName(); // Refactoring suggestion w/ enum class instead of if(...): this->renameTo = (Rename::RENAME_KEEP_ORIG_TEXT::YES ? "" : determineAddNewName());
 	}
 }
 
@@ -147,6 +147,7 @@ void Rename::renameHere() {
 		int numFilesInDir = number_of_files_in_directory(path);
 
 		// Helper function to find the right number of zeroes to indent
+		//BY RAUL: Below, I think you meant /= 10. %= 10 will transform 1004 -> 4, so it's always one iteration, while you probably want to decrement orders of magnitude.
 		while (numFilesInDir >= 100) {
 			numFilesInDir %= 10;
 			numberOfZeroesToIndent++;
@@ -158,6 +159,10 @@ void Rename::renameHere() {
 	}
 
 }
+
+//BY RAUL: Refactoring suggestions for renameCore():
+//Suggestions in the function body, but in general, I think dispensing w/ substr() and using path() on std::directory_entry 
+//and filename() / stem() / extension() / replace_filename() on std::path will save a lot of code 
 
 void Rename::renameCore(int numLeadingZeroes, std::string renameTo) {
 	int fileNum = 1;
@@ -173,9 +178,9 @@ void Rename::renameCore(int numLeadingZeroes, std::string renameTo) {
 	for (auto& dirEntry : std::filesystem::directory_iterator{ path }) {
 		if (dirEntry.is_regular_file()) {
 			// Turn dirEntry into a path format.
-			std::filesystem::path dirEntryPath{ dirEntry };
+			std::filesystem::path dirEntryPath{ dirEntry }; //BY RAUL: Refactoring suggestion : you can get path from directory entry via dirEntry.path()
 			// Turnt the dirEntryPath to string.
-			std::string stringPath = dirEntryPath.string();
+			std::string stringPath = dirEntryPath.string(); //BY RAUL : Refactoring suggestion : you can obtain filename (with extension) via path.filename(), only name via path.stem(), only extension via path.extension().
 
 			// Find the last occurance of '\' to find the filename.
 			int fileNameStart = stringPath.find_last_of('\\') + 1;
@@ -196,9 +201,9 @@ void Rename::renameCore(int numLeadingZeroes, std::string renameTo) {
 				newName = oss.str();
 				std::setfill(' ');
 			}
-			else {
+			else { //BY RAUL: Refactoring suggestion: else if (renameStyle == Rename::RENAME_STYLE_SELECTIVITY::PLAIN_NUMBERS), just for readibility 
 				newName = std::to_string(fileNum);
-				fileNum++;
+				fileNum++; //BY RAUL: Refactoring suggestion: take fileNum++ out of if / else since you're incrementing it in both cases
 			}
 
 			// if user want to keep original text
@@ -208,7 +213,7 @@ void Rename::renameCore(int numLeadingZeroes, std::string renameTo) {
 				// Adding the file format to the else statement helped. this line above should not have added the extension back, but for some reason it did.
 			}
 			else {
-				if (renameTo == "") {
+				if (renameTo == "") { //BY RAUL: Refactoring suggestion: can this if/else be transformed into: if (!renameTo.empty()){newName += ". " + renameTo;}?
 					newName = newName;
 				}
 				else {
@@ -221,9 +226,9 @@ void Rename::renameCore(int numLeadingZeroes, std::string renameTo) {
 
 			
 			// Create a new string representation of the path.
-			std::string newPathStrRepr = stringPath.substr(0, fileNameStart) + newName;
+			std::string newPathStrRepr = stringPath.substr(0, fileNameStart) + newName; 
 			// Create a new path representation from the new string representation of the path.
-			std::filesystem::path newPathPathRepr{ newPathStrRepr };
+			std::filesystem::path newPathPathRepr{ newPathStrRepr }; //BY RAUL: Refactoring suggestion: newPath{dirEntry.path().replace_filename(newName)}; 
 
 			// Rename the file
 			std::filesystem::rename(dirEntry, newPathPathRepr);

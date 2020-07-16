@@ -89,7 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\src;C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\src;C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

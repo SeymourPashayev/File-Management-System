@@ -14,7 +14,7 @@ private:
 	RENAME_SELECTIVITY renameSelectivity;
 	RENAME_STYLE_SELECTIVITY renameStyle;
 	bool keepOrigText;
-	std::string renameTo = "";
+	std::string renameTo = ""; //BY RAUL: Refactoring suggestion: std::string's default constructor already initializes it to ""
 	std::filesystem::path path;
 
 	//Helper functions
