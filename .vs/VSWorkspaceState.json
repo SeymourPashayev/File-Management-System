@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\testForGit"
+    "\\testForGit",
+    "\\testForGit\\src"
   ],
-  "SelectedNode": "\\testForGit\\Source.cpp",
+  "SelectedNode": "\\testForGit\\src\\Copy.cpp",
   "PreviewInSolutionExplorer": false
 }

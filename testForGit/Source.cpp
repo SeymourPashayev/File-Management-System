@@ -5,6 +5,7 @@
 #include <limits>
 #include "Copy.h"
 #include "Delete.h"
+#include "Rename.h"
 
 enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, SORT, FIND, END };
 
@@ -25,6 +26,8 @@ int main() {
         }
 
         case CHOICE::RENAME: {
+            Rename renameObj{ pathFrom };
+            renameObj.rename();
             break;
         }
 
