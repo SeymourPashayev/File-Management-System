@@ -89,10 +89,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -144,6 +146,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="src\Copy.cpp" />
+    <ClCompile Include="src\Delete.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\Copy.h" />
+    <ClInclude Include="inc\Delete.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
