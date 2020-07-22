@@ -7,14 +7,14 @@ class Rename
 private:
 	// Enum classes for selection during the runtime
 	enum class RENAME_SELECTIVITY { ALL_HERE = 1, ALL_INCL_SUBDIR, CUSTOM };
-	//enum class RENAME_KEEP_ORIG_TEXT { YES = 1, NO };
+	enum class RENAME_KEEP_ORIG_TEXT { YES = 1, NO };
 	enum class RENAME_STYLE_SELECTIVITY { PLAIN_NUMBERS = 1, LEADING_ZERO };
 
 	// Instance Variables
 	RENAME_SELECTIVITY renameSelectivity;
 	RENAME_STYLE_SELECTIVITY renameStyle;
-	bool keepOrigText;
-	std::string renameTo = ""; //BY RAUL: Refactoring suggestion: std::string's default constructor already initializes it to ""
+	RENAME_KEEP_ORIG_TEXT keepOrigText;
+	std::string renameTo;
 	std::filesystem::path path;
 
 	//Helper functions
@@ -26,7 +26,7 @@ private:
 	// Checkers
 	RENAME_SELECTIVITY determineRenameSelectivity();
 	RENAME_STYLE_SELECTIVITY determineRenameStyle();
-	bool determineKeepOrigText();
+	RENAME_KEEP_ORIG_TEXT determineKeepOrigText();
 	std::string determineAddNewName();
 	std::size_t number_of_files_in_directory(std::filesystem::path);
 
