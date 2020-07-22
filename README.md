@@ -1,10 +1,7 @@
 # File Management System
+# Authors: Raul Abdullayev, Seymour Pashayev.
 
-This is bullshit
+This is a basic file management system with useful functionality.
+This project is open sounce, and is good for anyone who wants to contribute to something that is not too hard to wrap one's head around.
 
-Lalaland
-
-test Sam Branch 2
-
-
-ROT EBAL uwu
+// Further documentation needed
