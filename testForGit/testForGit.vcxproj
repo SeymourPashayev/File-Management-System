@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateNew.h" />
     <ClInclude Include="inc\Copy.h" />
     <ClInclude Include="inc\Delete.h" />
     <ClInclude Include="inc\Rename.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateNew.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="src\Copy.cpp" />
     <ClCompile Include="src\Delete.cpp" />

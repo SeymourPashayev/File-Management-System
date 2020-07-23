@@ -6,6 +6,7 @@
 #include "Copy.h"
 #include "Delete.h"
 #include "Rename.h"
+#include "CreateNew.h"
 
 enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, SORT, FIND, END };
 
@@ -22,6 +23,8 @@ int main() {
         switch (choice) {
 
         case CHOICE::NEW: {
+            CreateNew createNewObj{ pathFrom }; // in this case pathTo, but ok.
+            createNewObj.createNew();
             break;
         }
 

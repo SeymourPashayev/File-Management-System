@@ -19,7 +19,6 @@ private:
 
 	//Helper functions
 	void renameCore(int, std::string);
-	void renameHere();
 	//void renameRecursive();
 	//void renameCustom();
 
