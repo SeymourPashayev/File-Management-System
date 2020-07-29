@@ -142,7 +142,7 @@ std::deque<long long> Copy::selectItems() {
         count++;
     }
 
-    if (itemLstOutput.str() != "") {
+    if (!itemLstOutput.str().empty()) {
         displayItems(allFiles, selectedFiles, itemLstOutput);
     }
 

@@ -117,7 +117,7 @@ std::deque<long long> Delete::selectItems() {
         count++;
     }
 
-    if (itemLstOutput.str() != "") {
+    if (!itemLstOutput.str().empty()) {
         displayItems(allFiles, selectedFiles, itemLstOutput);
     }
 

@@ -24,12 +24,18 @@
     <ClCompile Include="src\Delete.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Info.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Copy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Delete.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

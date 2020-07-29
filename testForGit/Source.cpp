@@ -5,6 +5,7 @@
 #include <limits>
 #include "Copy.h"
 #include "Delete.h"
+#include "Info.h"
 
 enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, SORT, FIND, END };
 
@@ -35,6 +36,8 @@ int main() {
         }
 
         case CHOICE::INFO: {
+            Info infoObj{ pathFrom };
+            infoObj.info();
             break;
         }
 

@@ -1,2 +1,6 @@
-﻿  Copy.cpp
+﻿  Source.cpp
+  Copy.cpp
+  Delete.cpp
+  Info.cpp
+  Generating Code...
   testForGit.vcxproj -> C:\Users\Raul\source\repos\File-Management-System\testForGit\Debug\testForGit.exe
