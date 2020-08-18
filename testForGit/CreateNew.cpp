@@ -1,6 +1,7 @@
 #include "CreateNew.h"
 #include <string>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 
 // Constructor 
@@ -74,6 +75,8 @@ std::string CreateNew::determineName()
 {
 	std::cout << std::endl << std::setw(50) << "Input file name(s):" << std::endl;
 	
+	// FIXME: Only the first word of the input gets captured.
+	// input: "Testing Folder" will yield a folder named "Testing".
 	std::string name;
 	std::cin >> name;
 
@@ -95,29 +98,40 @@ std::string CreateNew::determineExtension()
 
 // This function serves as a helper function to create new file(s).
 void CreateNew::createNewFile() {
-	switch (createCount) {
+	if (createCount == 1) 
+	{
+		//FIXME: Won't create files in c:/, probably won't create in d:/ either
+		path /= fileNameAndExt;
+		std::filesystem::create_directories(path.parent_path()); 
+		std::ofstream ofs(path);
+		ofs.close();
 
-	case 1: {
-		// FIXME: No way to create files at all.
-		std::filesystem::path pathToCreate = path /= name;
-		std::filesystem::create_directories(pathToCreate.parent_path());
-		break;
 	}
-		// FIXME: No way to create multiple files yet.
+	else if (createCount > 1)
+	{
+		for (int i = 1; i <= createCount; i++) {
+			std::filesystem::path pathToCreate{ path };
+			pathToCreate /= fileNameAndExt + " - " + std::to_string(i);
+			std::filesystem::create_directories(pathToCreate.parent_path());
+			std::ofstream ofs(pathToCreate);
+			ofs.close();
+		}
 	}
 	
 }
 
 // This function serves as a helper function to create new Director(y/ies).
 void CreateNew::createNewDirectory() {
-	switch (createCount) {
-	
-	case 1: {
+	if (createCount == 1) {
+
 		std::filesystem::path pathToCreate = path /= name;
 		std::filesystem::create_directory(pathToCreate);
-		break;
-	}
-		// FIXME: No way to create multiple directories yet.
-		//std::filesystem::create_directories();
+	} 
+	else if(createCount > 1){
+		for (int i = 1; i <= createCount; i++) {
+			std::filesystem::path pathToCreate { path };
+			pathToCreate /= name + " - " + std::to_string(i);
+			std::filesystem::create_directory(pathToCreate);
+		}
 	}
 }
