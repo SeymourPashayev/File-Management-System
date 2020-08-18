@@ -24,6 +24,12 @@
     <ClInclude Include="inc\Rename.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\FileManagementUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Copy.cpp">
@@ -36,6 +42,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileManagementUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

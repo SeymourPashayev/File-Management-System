@@ -8,12 +8,9 @@
 #include <algorithm>
 #include <regex>
 
-Copy::Copy(std::filesystem::path& pathFrom) {
-    this->pathFrom = pathFrom;
+Copy::Copy(std::filesystem::path& pathFrom) : FileManagementUnit(pathFrom) {
     this->pathTo = determineTargetDirectory();
-    this->copyItems = determineCopyItems();
     this->nameConflictResolution = determineNameConflictResolution();
-    this->copySelectivity = (copyItems == COPY_ITEMS::ALL ? COPY_SELECTIVITY::ALL : determineCopySelectivity());
 }
 
 void Copy::copy() {
@@ -21,19 +18,19 @@ void Copy::copy() {
     cpyOpt = (nameConflictResolution == NAME_CONFLICT_RESOLUTION::KEEP ? cpyOpt :
         std::filesystem::copy_options::overwrite_existing);
 
-    switch (copyItems) {
+    switch (FileManagementUnit::getItems()) {
 
-    case Copy::COPY_ITEMS::ALL: {
-        std::filesystem::copy(pathFrom, pathTo, (cpyOpt | std::filesystem::copy_options::recursive));
+    case FileManagementUnit::ITEMS::ALL: {
+        std::filesystem::copy(FileManagementUnit::getPath(), pathTo, (cpyOpt | std::filesystem::copy_options::recursive));
         break;
     }
 
-    case Copy::COPY_ITEMS::FILES: {
+    case FileManagementUnit::ITEMS::FILES: {
         copyFiles(cpyOpt);
         break;
     }
 
-    case Copy::COPY_ITEMS::DIRECTORIES: {
+    case FileManagementUnit::ITEMS::DIRECTORIES: {
         copyDirectories(cpyOpt);
         break;
     }
@@ -41,10 +38,10 @@ void Copy::copy() {
 }
 
 void Copy::copyFiles(std::filesystem::copy_options& cpyOpt) {
-    switch (copySelectivity) {
+    switch (FileManagementUnit::getSelectivity()) {
 
-    case Copy::COPY_SELECTIVITY::ALL: {
-        for (auto& dirEntry : std::filesystem::directory_iterator{ pathFrom }) {
+    case FileManagementUnit::SELECTIVITY::ALL: {
+        for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::getPath() }) {
             if (dirEntry.is_regular_file()) {
                 std::filesystem::copy_file(dirEntry.path(), pathTo / dirEntry.path().filename(), cpyOpt);
             }
@@ -52,11 +49,11 @@ void Copy::copyFiles(std::filesystem::copy_options& cpyOpt) {
         break;
     }
 
-    case Copy::COPY_SELECTIVITY::CUSTOM: {
-        std::deque<long long> selectedFiles{ selectItems() };
+    case FileManagementUnit::SELECTIVITY::CUSTOM: {
+        std::deque<long long> selectedFiles{ FileManagementUnit::selectItems() };
         long long count{ 1 };
 
-        for (auto& dirEntry : std::filesystem::directory_iterator{ pathFrom }) {
+        for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::getPath() }) {
             if (!selectedFiles.empty() && count == selectedFiles.front()) {
                 std::filesystem::copy_file(dirEntry.path(), pathTo / (dirEntry.path().filename()), cpyOpt);
                 selectedFiles.pop_front();
@@ -71,18 +68,18 @@ void Copy::copyFiles(std::filesystem::copy_options& cpyOpt) {
 }
 
 void Copy::copyDirectories(std::filesystem::copy_options& cpyOpt) {
-    switch (copySelectivity) {
+    switch (FileManagementUnit::getSelectivity()) {
 
-    case Copy::COPY_SELECTIVITY::ALL: {
-        std::filesystem::copy(pathFrom, pathTo, cpyOpt | std::filesystem::copy_options::recursive | std::filesystem::copy_options::directories_only);
+    case FileManagementUnit::SELECTIVITY::ALL: {
+        std::filesystem::copy(FileManagementUnit::getPath(), pathTo, cpyOpt | std::filesystem::copy_options::recursive | std::filesystem::copy_options::directories_only);
         break;
     }
 
-    case Copy::COPY_SELECTIVITY::CUSTOM: { 
+    case FileManagementUnit::SELECTIVITY::CUSTOM: {
         std::deque<long long> selectedDirectories{ selectItems() };
         long long count{ 1 };
 
-        for (std::filesystem::recursive_directory_iterator next{ pathFrom }, end; next != end; ++next) {
+        for (std::filesystem::recursive_directory_iterator next{ FileManagementUnit::getPath()}, end; next != end; ++next) {
             if (next.depth() == 0) {
 
                 if (!selectedDirectories.empty() && count == selectedDirectories.front()) {
@@ -100,13 +97,13 @@ void Copy::copyDirectories(std::filesystem::copy_options& cpyOpt) {
                 //depth can be anything > 0, so we substitute pathFrom w/ pathTo, leaving path at greater depth intact. 
 
                 std::string parentDirectoryStr{ (*next).path().parent_path().string() };
-                std::regex parentReg{ regexStrParser(pathFrom.string()) };
+                std::regex parentReg{ regexStrParser(FileManagementUnit::getPath().string()) };
                 std::filesystem::path targetParentDirectory{ std::regex_replace(parentDirectoryStr, parentReg, pathTo.string()) };
 
                 if (std::filesystem::exists(targetParentDirectory) && (*next).is_directory()) { 
                     std::string outPath{ (*next).path().string() };
 
-                    std::string regStr{ pathFrom.string() };
+                    std::string regStr{ FileManagementUnit::getPath().string() };
                     std::regex reg{ regexStrParser(regStr) };
 
                     std::string parsedPath{ std::regex_replace(outPath, reg, pathTo.string()) };
@@ -117,69 +114,6 @@ void Copy::copyDirectories(std::filesystem::copy_options& cpyOpt) {
         break;
     }
     }
-}
-
-std::deque<long long> Copy::selectItems() {
-    std::deque<long long> selectedFiles;
-    std::vector<long long> allFiles;
-
-    std::ostringstream itemLstOutput;
-    long long count{ 1 };
-
-    for (auto& dirEntry : std::filesystem::directory_iterator{ pathFrom }) {
-        std::filesystem::path filePath{ dirEntry.path() };
-
-        if ((copyItems == Copy::COPY_ITEMS::FILES && std::filesystem::is_regular_file(filePath)) ||
-            (copyItems == Copy::COPY_ITEMS::DIRECTORIES && std::filesystem::is_directory(filePath))) {
-
-            itemLstOutput << "ID# " << count << " . File name: " << filePath.filename() << std::endl;
-            allFiles.push_back(count);
-        }
-
-        if (count % 15 == 0) {
-            displayItems(allFiles, selectedFiles, itemLstOutput);
-        }
-
-        count++;
-    }
-
-    if (itemLstOutput.str() != "") {
-        displayItems(allFiles, selectedFiles, itemLstOutput);
-    }
-
-
-    return selectedFiles;
-}
-
-void Copy::displayItems(std::vector<long long>& allFiles, std::deque<long long>& selectedFiles, std::ostringstream& itemLstOutput) {
-    std::cout << std::endl << itemLstOutput.str();
-    std::cout << std::endl << "From the list above, enter the IDs of the items you would like to copy." << std::endl;
-    std::cout << "To terminate, CTRL + z" << std::endl;
-
-    long long selectedID{ 0 };
-    unsigned long long selectionCount{ 0 };
-
-    while ((std::cin >> selectedID || !std::cin.eof()) && selectionCount < allFiles.size() ) {
-        if (!std::cin.good()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-
-        if (std::binary_search(allFiles.begin(), allFiles.end(), selectedID) && !std::binary_search(selectedFiles.begin(), selectedFiles.end(), selectedID)) {
-            selectedFiles.push_back(selectedID);
-            std::sort(selectedFiles.begin(), selectedFiles.end());
-            selectionCount++;
-        }
-
-        else {
-            std::cerr << std::endl << "Invalid input. Make sure item ID is on the list and the last entry is not a duplicate." << std::endl << std::endl;
-        }
-    }
-
-    std::cin.clear();
-    allFiles.clear();
-    itemLstOutput.str("");
-    itemLstOutput.clear();
 }
 
 std::filesystem::path Copy::determineTargetDirectory() {
@@ -217,59 +151,6 @@ std::filesystem::path Copy::determineTargetDirectory() {
     }
 
     return tempPath;
-}
-
-Copy::COPY_ITEMS Copy::determineCopyItems() {
-    std::cout << std::endl << std::setw(50) << "Type of the items to be copied:" << std::endl;
-    std::cout << std::setw(50) << "1 - All files and directories." << std::endl;
-    std::cout << std::setw(50) << "2 - Selected files." << std::endl;
-    std::cout << std::setw(50) << "3 - Selected directories." << std::endl;
-
-    int copyItemType;
-    std::cin >> copyItemType;
-
-    if (!std::cin.good()) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-
-    while (copyItemType < 1 || copyItemType > 3) {
-        std::cerr << std::endl << "Invalid input. Enter an integer 1-3." << std::endl;
-        std::cin >> copyItemType;
-
-        if (!std::cin.good()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-    }
-
-    return static_cast<Copy::COPY_ITEMS>(copyItemType);
-}
-
-Copy::COPY_SELECTIVITY Copy::determineCopySelectivity() {
-    std::cout << std::endl << std::setw(50) << "Selectivity:" << std::endl;
-    std::cout << std::setw(50) << "1 - All items." << std::endl;
-    std::cout << std::setw(50) << "2 - Custom selection." << std::endl;
-
-    int copySelectivity;
-    std::cin >> copySelectivity;
-
-    if (!std::cin.good()) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-
-    while (copySelectivity < 1 || copySelectivity > 2) {
-        std::cerr << "Invalid input. Enter an integer 1 - 2 ." << std::endl;
-        std::cin >> copySelectivity;
-
-        if (!std::cin.good()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-    }
-
-    return static_cast<Copy::COPY_SELECTIVITY>(copySelectivity);
 }
 
 Copy::NAME_CONFLICT_RESOLUTION Copy::determineNameConflictResolution() {

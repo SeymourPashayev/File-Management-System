@@ -6,8 +6,10 @@
 #include "Copy.h"
 #include "Delete.h"
 #include "Rename.h"
+#include "Info.h"
+#include "FileManagementUnit.h"
 
-enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, SORT, FIND, END };
+enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, FIND, END };
 
 int menu();
 std::filesystem::path determineSourceDirectory(CHOICE choice);
@@ -38,17 +40,14 @@ int main() {
         }
 
         case CHOICE::INFO: {
+            Info infoObj{ pathFrom };
+            infoObj.info();
             break;
         }
 
         case CHOICE::COPY: {
             Copy copyObj{ pathFrom };
             copyObj.copy();
-            break;
-        }
-
-        case CHOICE::SORT: {
-          
             break;
         }
 
@@ -68,9 +67,8 @@ int menu() {
     std::cout << std::setw(50) << "3 - Delete an existing file / directory." << std::endl;
     std::cout << std::setw(50) << "4 - Get information on an existing file / directory." << std::endl;
     std::cout << std::setw(50) << "5 - Copy an existing file / directory to another directory." << std::endl;
-    std::cout << std::setw(50) << "6 - Sort files in a directory with a key." << std::endl;
-    std::cout << std::setw(50) << "7 - Find file(s) in a directory with a key." << std::endl;
-    std::cout << std::setw(50) << "8 - Exit program." << std::endl << std::endl;
+    std::cout << std::setw(50) << "6 - Find file(s) in a directory with a key." << std::endl;
+    std::cout << std::setw(50) << "7 - Exit program." << std::endl;
 
     int choice{};
     std::cin >> choice;
@@ -80,8 +78,8 @@ int menu() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    while (choice < 1 || choice > 8) {
-        std::cerr << std::endl << "Invalid input. Enter an integer 1-8 ." << std::endl;
+    while (choice < 1 || choice > 7) {
+        std::cerr << std::endl << "Invalid input. Enter an integer 1-7 ." << std::endl;
 
         std::cin >> choice;
 
