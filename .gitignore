@@ -339,3 +339,5 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 *.db
+testForGit/.vs/testForGit/v16/Browse.VC.db
+testForGit/.vs/testForGit/v16/.suo
