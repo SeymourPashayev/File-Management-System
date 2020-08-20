@@ -1,7 +1,4 @@
 ﻿  Source.cpp
-  Copy.cpp
-  Delete.cpp
-  FileManagementUnit.cpp
-  Info.cpp
+  CreateNew.cpp
   Generating Code...
-  testForGit.vcxproj -> C:\Users\Raul\source\repos\File-Management-System\testForGit\Debug\testForGit.exe
+  testForGit.vcxproj -> C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\Debug\testForGit.exe
