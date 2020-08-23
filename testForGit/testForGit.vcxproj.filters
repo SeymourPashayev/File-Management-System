@@ -21,9 +21,6 @@
     <ClInclude Include="inc\Delete.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Rename.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\Info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -33,15 +30,18 @@
     <ClInclude Include="inc\CreateNew.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Rename_Old.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rename_v2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Copy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Delete.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rename.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
@@ -54,6 +54,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\CreateNew.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rename_Old.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rename_v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

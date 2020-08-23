@@ -5,7 +5,7 @@
 #include "Copy.h"
 #include "CreateNew.h"
 #include "Delete.h"
-#include "Rename.h"
+#include "Rename_v2.h"
 #include "Info.h"
 #include "FileManagementUnit.h"
 
@@ -30,7 +30,7 @@ int main() {
         }
 
         case CHOICE::RENAME: {
-            Rename renameObj{ pathFrom };
+            Rename_v2 renameObj{ pathFrom };
             renameObj.rename();
             break;
         }

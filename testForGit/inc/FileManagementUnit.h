@@ -21,7 +21,7 @@ protected:
 
 	std::deque<long long> selectItems();
 	void displayItems(std::vector<long long>&, std::deque<long long>&, std::ostringstream&);
-
+	
 public:
 	FileManagementUnit(std::filesystem::path);
 	virtual ~FileManagementUnit() = default;
