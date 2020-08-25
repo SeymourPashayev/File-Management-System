@@ -30,6 +30,9 @@
     <ClInclude Include="inc\FileManagementUnit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\CreateNew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Copy.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FileManagementUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CreateNew.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,9 +1,9 @@
-
 #include <iostream>
 #include <filesystem>
 #include <string>
 #include <limits>
 #include "Copy.h"
+#include "CreateNew.h"
 #include "Delete.h"
 #include "Rename.h"
 #include "Info.h"
@@ -24,6 +24,8 @@ int main() {
         switch (choice) {
 
         case CHOICE::NEW: {
+            CreateNew createNewObj{ pathFrom };
+            createNewObj.createNew();
             break;
         }
 
