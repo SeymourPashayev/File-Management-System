@@ -208,7 +208,7 @@ void Rename::renameCore(int numLeadingZeroes, std::string renameTo) {
 // @Output: std::size_t number of files in a directory.
 std::size_t Rename::number_of_files_in_directory(std::filesystem::path pathToCheck)
 {
-	using std::filesystem::directory_iterator;
-	using fp = bool (*)(const std::filesystem::path&);
-	return std::count_if(directory_iterator(pathToCheck), directory_iterator{}, (fp)std::filesystem::is_regular_file);
+	auto isRegularFile{ [](auto pathToCheck) {return std::filesystem::is_regular_file(pathToCheck); } };
+	return std::count_if(std::filesystem::directory_iterator(pathToCheck), std::filesystem::directory_iterator{}, 
+		isRegularFile);
 }

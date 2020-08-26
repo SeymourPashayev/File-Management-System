@@ -23,6 +23,7 @@
     <ClInclude Include="inc\CreateNew.h" />
     <ClInclude Include="inc\Delete.h" />
     <ClInclude Include="inc\FileManagementUnit.h" />
+    <ClInclude Include="inc\Find.h" />
     <ClInclude Include="inc\Info.h" />
     <ClInclude Include="inc\Rename.h" />
   </ItemGroup>
@@ -32,6 +33,7 @@
     <ClCompile Include="src\CreateNew.cpp" />
     <ClCompile Include="src\Delete.cpp" />
     <ClCompile Include="src\FileManagementUnit.cpp" />
+    <ClCompile Include="src\Find.cpp" />
     <ClCompile Include="src\Info.cpp" />
     <ClCompile Include="src\Rename.cpp" />
   </ItemGroup>
