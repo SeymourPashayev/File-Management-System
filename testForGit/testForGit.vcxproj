@@ -24,18 +24,16 @@
     <ClInclude Include="inc\Delete.h" />
     <ClInclude Include="inc\FileManagementUnit.h" />
     <ClInclude Include="inc\Info.h" />
-    <ClInclude Include="inc\Rename_Old.h" />
-    <ClInclude Include="Rename_v2.h" />
+    <ClInclude Include="Rename.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Rename_v2.cpp" />
+    <ClCompile Include="Rename.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="src\Copy.cpp" />
     <ClCompile Include="src\CreateNew.cpp" />
     <ClCompile Include="src\Delete.cpp" />
     <ClCompile Include="src\FileManagementUnit.cpp" />
     <ClCompile Include="src\Info.cpp" />
-    <ClCompile Include="src\Rename_Old.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

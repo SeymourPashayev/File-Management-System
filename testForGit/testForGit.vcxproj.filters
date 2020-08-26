@@ -30,10 +30,7 @@
     <ClInclude Include="inc\CreateNew.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Rename_Old.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rename_v2.h">
+    <ClInclude Include="Rename.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,10 +53,7 @@
     <ClCompile Include="src\CreateNew.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rename_Old.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rename_v2.cpp">
+    <ClCompile Include="Rename.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,11 +1,2 @@
-﻿  Source.cpp
-  Copy.cpp
-  CreateNew.cpp
-  Delete.cpp
-  FileManagementUnit.cpp
-  Info.cpp
-  Rename.cpp
-C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\src\Rename.cpp(169,9): warning C4834: discarding return value of function with 'nodiscard' attribute
-  Generating Code...
-  LINK : C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\Debug\testForGit.exe not found or not built by the last incremental link; performing full link
+﻿  Rename.cpp
   testForGit.vcxproj -> C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\Debug\testForGit.exe
