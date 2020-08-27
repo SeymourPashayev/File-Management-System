@@ -4,3 +4,5 @@ C:\Users\Raul\source\repos\File-Management-System\testForGit\Debug\testForGit.ex
 C:\Users\Raul\source\repos\File-Management-System\testForGit\Debug\testForGit.pdb
 C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\Debug\testForGit.exe
 C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\Debug\testForGit.pdb
+C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\Debug\testForGit.exe
+C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\Debug\testForGit.pdb
