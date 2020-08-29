@@ -106,12 +106,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\inc;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit;C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\inc;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
