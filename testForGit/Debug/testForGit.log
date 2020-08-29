@@ -1,2 +1,10 @@
 ﻿  Rename.cpp
+  Source.cpp
+  Copy.cpp
+  CreateNew.cpp
+  Delete.cpp
+  FileManagementUnit.cpp
+  Info.cpp
+  Generating Code...
+  LINK : C:\Users\Raul Abdullayev\Source\Repos\SeymourPashayev\File-Management-System\testForGit\Debug\testForGit.exe not found or not built by the last incremental link; performing full link
   testForGit.vcxproj -> C:\Users\Raul Abdullayev\Source\Repos\SeymourPashayev\File-Management-System\testForGit\Debug\testForGit.exe
