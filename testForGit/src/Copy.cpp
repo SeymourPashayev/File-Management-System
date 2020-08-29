@@ -47,26 +47,9 @@ void Copy::copyAll(const std::filesystem::copy_options& cpyOpt) {
     
     case FileManagementUnit::SELECTIVITY::CUSTOM: { //this is meant as Find's secondary action only
         std::deque<long long> originalFileLst{ FileManagementUnit::fileLst };
-        try {
-            copyFiles(cpyOpt);
-        }
-
-        catch (std::filesystem::filesystem_error& ex) {
-            std::cout << ex.what() << std::endl;
-        }
-
-        std::cout << "File copy passed." << std::endl;
+        copyFiles(cpyOpt);
         FileManagementUnit::fileLst = originalFileLst;
-
-        try {
-            copyDirectories(cpyOpt);
-        }
-
-        catch (std::filesystem::filesystem_error& ex) {
-            std::cout << ex.what() << std::endl;
-        }
-
-        std::cout << "Directory copy passed." << std::endl;
+        copyDirectories(cpyOpt);
         break;
     }
     }
