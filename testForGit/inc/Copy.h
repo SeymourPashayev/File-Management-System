@@ -16,14 +16,15 @@ private:
 	std::filesystem::path determineTargetDirectory();
 	NAME_CONFLICT_RESOLUTION determineNameConflictResolution();
 
-	void copyFiles(std::filesystem::copy_options&);
-	void copyDirectories(std::filesystem::copy_options&);
+	void copyAll(const std::filesystem::copy_options&);
+	void copyFiles(const std::filesystem::copy_options&);
+	void copyDirectories(const std::filesystem::copy_options&);
 
 	std::string regexStrParser(std::string);
 
 public:
 	Copy(const std::filesystem::path&);
-	Copy(const std::filesystem::path&, const int, const int, const std::deque<long long>&);
+	Copy(const std::filesystem::path&, const FileManagementUnit::ITEMS, const FileManagementUnit::SELECTIVITY, const std::deque<long long>&);
 	void copy();
 };
 #endif

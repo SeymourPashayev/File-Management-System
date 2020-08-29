@@ -11,19 +11,18 @@
 Copy::Copy(const std::filesystem::path& pathFrom) : 
     FileManagementUnit{ pathFrom }, pathTo{ determineTargetDirectory() }, nameConflictResolution{ determineNameConflictResolution() } {}
 
-Copy::Copy(const std::filesystem::path& pathFrom, const int items, const int selectivity, const std::deque<long long>& fileLst):
-    FileManagementUnit{pathFrom, items, selectivity, fileLst}, 
+Copy::Copy(const std::filesystem::path& pathFrom, const FileManagementUnit::ITEMS items, const FileManagementUnit::SELECTIVITY selectivity, 
+    const std::deque<long long>& fileLst):FileManagementUnit{pathFrom, items, selectivity, fileLst}, 
     pathTo{ determineTargetDirectory() }, nameConflictResolution{ determineNameConflictResolution() }{}
 
 void Copy::copy() {
-    std::filesystem::copy_options cpyOpt{ std::filesystem::copy_options::skip_existing };
-    cpyOpt = (nameConflictResolution == NAME_CONFLICT_RESOLUTION::KEEP ? cpyOpt :
-        std::filesystem::copy_options::overwrite_existing);
+    std::filesystem::copy_options cpyOpt{ (nameConflictResolution == NAME_CONFLICT_RESOLUTION::KEEP ? 
+        std::filesystem::copy_options::skip_existing :std::filesystem::copy_options::overwrite_existing) };
 
-    switch (FileManagementUnit::getItems()) {
+    switch (FileManagementUnit::items) {
 
     case FileManagementUnit::ITEMS::ALL: {
-        std::filesystem::copy(FileManagementUnit::getPath(), pathTo, (cpyOpt | std::filesystem::copy_options::recursive));
+        copyAll(cpyOpt);
         break;
     }
 
@@ -39,29 +38,69 @@ void Copy::copy() {
     }
 }
 
-void Copy::copyFiles(std::filesystem::copy_options& cpyOpt) {
-    switch (FileManagementUnit::getSelectivity()) {
+void Copy::copyAll(const std::filesystem::copy_options& cpyOpt) {
+    switch (FileManagementUnit::selectivity) {
+    case FileManagementUnit::SELECTIVITY::ALL: {
+        std::filesystem::copy(FileManagementUnit::path, pathTo, (cpyOpt | std::filesystem::copy_options::recursive));
+        break;
+    }
+    
+    case FileManagementUnit::SELECTIVITY::CUSTOM: { //this is meant as Find's secondary action only
+        std::deque<long long> originalFileLst{ FileManagementUnit::fileLst };
+        try {
+            copyFiles(cpyOpt);
+        }
+
+        catch (std::filesystem::filesystem_error& ex) {
+            std::cout << ex.what() << std::endl;
+        }
+
+        std::cout << "File copy passed." << std::endl;
+        FileManagementUnit::fileLst = originalFileLst;
+
+        try {
+            copyDirectories(cpyOpt);
+        }
+
+        catch (std::filesystem::filesystem_error& ex) {
+            std::cout << ex.what() << std::endl;
+        }
+
+        std::cout << "Directory copy passed." << std::endl;
+        break;
+    }
+    }
+}
+
+void Copy::copyFiles(const std::filesystem::copy_options& cpyOpt) {
+    switch (FileManagementUnit::selectivity) {
 
     case FileManagementUnit::SELECTIVITY::ALL: {
-        for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::getPath() }) {
+        for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::path }) {
             if (dirEntry.is_regular_file()) {
                 std::filesystem::copy_file(dirEntry.path(), pathTo / dirEntry.path().filename(), cpyOpt);
             }
         }
+
         break;
     }
 
     case FileManagementUnit::SELECTIVITY::CUSTOM: {
-        std::deque<long long> selectedFiles{ FileManagementUnit::selectItems() };
-        long long count{ 1 };
+        if (FileManagementUnit::fileLst.empty()) {
+            FileManagementUnit::fileLst = selectItems();
+        }
 
-        for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::getPath() }) {
-            if (!selectedFiles.empty() && count == selectedFiles.front()) {
-                std::filesystem::copy_file(dirEntry.path(), pathTo / (dirEntry.path().filename()), cpyOpt);
-                selectedFiles.pop_front();
+        long long fileNum{ 1 };
+
+        for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::path }) {
+            if (!FileManagementUnit::fileLst.empty() && fileNum == FileManagementUnit::fileLst.front()) {
+                if (dirEntry.is_regular_file()) {
+                    std::filesystem::copy_file(dirEntry.path(), pathTo / (dirEntry.path().filename()), cpyOpt);
+                }
+                FileManagementUnit::fileLst.pop_front();
             }
 
-            count++;
+            ++fileNum;
         }
         break;
     }
@@ -69,43 +108,46 @@ void Copy::copyFiles(std::filesystem::copy_options& cpyOpt) {
     }
 }
 
-void Copy::copyDirectories(std::filesystem::copy_options& cpyOpt) {
-    switch (FileManagementUnit::getSelectivity()) {
+void Copy::copyDirectories(const std::filesystem::copy_options& cpyOpt) {
+    switch (FileManagementUnit::selectivity) {
 
     case FileManagementUnit::SELECTIVITY::ALL: {
-        std::filesystem::copy(FileManagementUnit::getPath(), pathTo, cpyOpt | std::filesystem::copy_options::recursive | std::filesystem::copy_options::directories_only);
+        std::filesystem::copy(FileManagementUnit::path, pathTo, cpyOpt | std::filesystem::copy_options::recursive | std::filesystem::copy_options::directories_only);
         break;
     }
 
     case FileManagementUnit::SELECTIVITY::CUSTOM: {
-        std::deque<long long> selectedDirectories{ selectItems() };
-        long long count{ 1 };
+        if (FileManagementUnit::fileLst.empty()) {
+            FileManagementUnit::fileLst = selectItems();
+        }
 
-        for (std::filesystem::recursive_directory_iterator next{ FileManagementUnit::getPath()}, end; next != end; ++next) {
+        long long fileNum{ 1 };
+
+        for (std::filesystem::recursive_directory_iterator next{ FileManagementUnit::path}, end; next != end; ++next) {
             if (next.depth() == 0) {
 
-                if (!selectedDirectories.empty() && count == selectedDirectories.front()) {
-                    std::filesystem::create_directory(pathTo / (*next).path().filename()); //when directory is 1 level below pathFrom, copy path = pathTo + directory name 
-
-                    if (selectedDirectories.size() > 1) {
-                        selectedDirectories.pop_front();
+                if (!FileManagementUnit::fileLst.empty() && fileNum == FileManagementUnit::fileLst.front()) {
+                    if ((*next).is_directory()) {
+                        std::filesystem::create_directory(pathTo / (*next).path().filename()); //when directory is 1 level below pathFrom, copy path = pathTo + directory name 
                     }
+                    FileManagementUnit::fileLst.pop_front();
+                    
                 }
 
-                count++;
+                ++fileNum;
             }
 
             else {
                 //depth can be anything > 0, so we substitute pathFrom w/ pathTo, leaving path at greater depth intact. 
 
                 std::string parentDirectoryStr{ (*next).path().parent_path().string() };
-                std::regex parentReg{ regexStrParser(FileManagementUnit::getPath().string()) };
+                std::regex parentReg{ regexStrParser(FileManagementUnit::path.string()) };
                 std::filesystem::path targetParentDirectory{ std::regex_replace(parentDirectoryStr, parentReg, pathTo.string()) };
 
                 if (std::filesystem::exists(targetParentDirectory) && (*next).is_directory()) { 
                     std::string outPath{ (*next).path().string() };
 
-                    std::string regStr{ FileManagementUnit::getPath().string() };
+                    std::string regStr{ FileManagementUnit::path.string() };
                     std::regex reg{ regexStrParser(regStr) };
 
                     std::string parsedPath{ std::regex_replace(outPath, reg, pathTo.string()) };

@@ -9,14 +9,14 @@
 
 Delete::Delete(const std::filesystem::path& path) : FileManagementUnit{ path } {}
 
-Delete::Delete(const std::filesystem::path& path, const int items, const int selectivity, const std::deque<long long>& fileLst) : 
-    FileManagementUnit{path, items, selectivity, fileLst}{}
+Delete::Delete(const std::filesystem::path& path, const FileManagementUnit::ITEMS items, const FileManagementUnit::SELECTIVITY selectivity, 
+    const std::deque<long long>& fileLst) : FileManagementUnit{path, items, selectivity, fileLst}{}
 
-void Delete::deletion() { //NOT INTEGRATED WITH Find
-	switch (FileManagementUnit::getItems()) {
+void Delete::deletion() { 
+	switch (FileManagementUnit::items) {
 
     case FileManagementUnit::ITEMS::ALL: {
-        std::filesystem::remove_all(path);
+        deleteAll();
 		break;
 	}
 
@@ -33,11 +33,34 @@ void Delete::deletion() { //NOT INTEGRATED WITH Find
 	}
 }
 
+void Delete::deleteAll() {
+    switch (FileManagementUnit::selectivity) {
+    case FileManagementUnit::SELECTIVITY::ALL: {
+        std::filesystem::remove_all(path);
+        break;
+    }
+
+    case FileManagementUnit::SELECTIVITY::CUSTOM: { //this is meant as Find's secondary action only 
+        int fileNum{ 1 };
+
+        for (const auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::path }) {
+            if (!FileManagementUnit::fileLst.empty() && fileNum == FileManagementUnit::fileLst.front()) {
+                std::filesystem::remove(dirEntry.path());
+                FileManagementUnit::fileLst.pop_front();
+            }
+
+            ++fileNum;
+        }
+    }
+
+    }
+}
+
 void Delete::deleteFiles() {
-    switch (FileManagementUnit::getSelectivity()) {
+    switch (FileManagementUnit::selectivity) {
 
     case FileManagementUnit::SELECTIVITY::ALL: {
-        for (auto& dirEntry : std::filesystem::directory_iterator{ path }) {
+        for (const auto& dirEntry : std::filesystem::directory_iterator{ path }) {
             if (dirEntry.is_regular_file()) {
                 std::filesystem::remove(dirEntry.path());
             }
@@ -46,16 +69,20 @@ void Delete::deleteFiles() {
     }
 
     case FileManagementUnit::SELECTIVITY::CUSTOM: {
-        std::deque<long long> selectedFiles{ selectItems() };
-        long long count{ 1 };
 
-        for (auto& dirEntry : std::filesystem::directory_iterator{ path }) {
-            if (!selectedFiles.empty() && count == selectedFiles.front()) {
+        if (FileManagementUnit::fileLst.empty()) {
+            FileManagementUnit::fileLst = selectItems();
+        }
+
+        long long fileNum{ 1 };
+
+        for (const auto& dirEntry : std::filesystem::directory_iterator{ path }) {
+            if (!FileManagementUnit::fileLst.empty() && fileNum == FileManagementUnit::fileLst.front()) {
                 std::filesystem::remove(dirEntry.path());
-                selectedFiles.pop_front();
+                FileManagementUnit::fileLst.pop_front();
             }
 
-            count++;
+            ++fileNum;
         }
         break;
     }
@@ -64,10 +91,10 @@ void Delete::deleteFiles() {
 }
 
 void Delete::deleteDirectories() {
-    switch (FileManagementUnit::getSelectivity()) {
+    switch (FileManagementUnit::selectivity) {
 
     case FileManagementUnit::SELECTIVITY::ALL: {
-        for (auto& dirEntry : std::filesystem::directory_iterator{ path }) {
+        for (const auto& dirEntry : std::filesystem::directory_iterator{ path }) {
             if (dirEntry.is_directory()) {
                 std::filesystem::remove_all(dirEntry.path());
             }
@@ -76,17 +103,21 @@ void Delete::deleteDirectories() {
     }
 
     case FileManagementUnit::SELECTIVITY::CUSTOM: {
-        std::deque<long long> selectedDirectories{ selectItems() };
-        long long count{ 1 };
+        if (FileManagementUnit::fileLst.empty()) {
+            FileManagementUnit::fileLst = selectItems();
+        }
 
-        for (auto& dirEntry : std::filesystem::directory_iterator{ path } ) {
-            if (dirEntry.is_directory() && count == selectedDirectories.front()) {
+        long long fileNum{ 1 };
+
+        for (const auto& dirEntry : std::filesystem::directory_iterator{ path } ) {
+            if (dirEntry.is_directory() && fileNum == FileManagementUnit::fileLst.front()) {
                 std::filesystem::remove_all(dirEntry.path());
-                selectedDirectories.pop_front();
+                FileManagementUnit::fileLst.pop_front();
             }
 
-            count++;
+            ++fileNum;
         }
+
         break;
     }
     }

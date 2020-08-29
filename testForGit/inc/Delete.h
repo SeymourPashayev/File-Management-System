@@ -8,12 +8,13 @@
 class Delete : public FileManagementUnit
 {
 private:
+	void deleteAll();
 	void deleteFiles();
 	void deleteDirectories();
 
 public:
 	Delete(const std::filesystem::path&);
-	Delete(const std::filesystem::path&, const int, const int, const std::deque<long long>&);
+	Delete(const std::filesystem::path&, const FileManagementUnit::ITEMS, const FileManagementUnit::SELECTIVITY, const std::deque<long long>&);
 	void deletion();
 };
 #endif

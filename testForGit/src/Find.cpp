@@ -12,7 +12,9 @@
 const std::map<std::string, int> Find::monthToInt{ {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4}, {"May", 5}, {"Jun", 6},
 	{"Jul", 7}, {"Aug", 8}, {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12} };
 
-Find::Find(const std::filesystem::path& path) : FileManagementUnit{ path, 1 }, searchParameters{ determineSearchParameters() }{
+Find::Find(const std::filesystem::path& path) : FileManagementUnit{ path, FileManagementUnit::SELECTIVITY::ALL }, 
+    searchParameters{ determineSearchParameters() }{
+
 	if (searchParameters[0]) {
 		datePrecision = determineDatePrecision();
 		targetDate = determineTargetDate();
@@ -26,25 +28,30 @@ Find::Find(const std::filesystem::path& path) : FileManagementUnit{ path, 1 }, s
 	if (searchParameters[2]) {
 		targetExt = determineTargetExtension();
 	}
+
+	else if (FileManagementUnit::items == FileManagementUnit::ITEMS::DIRECTORIES) { //If user choose DIRECTORIES for ITEMS, we treat directory
+		searchParameters.set(2);                                              //as an extension match, even though user doesn't choose it
+		targetExt = "Folder";                                                 //explicitly in determineSeachParameters()
+	}
 }
 
 void Find::find() {
 	long long fileNum{ 1 };
 
-	for (const auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::getPath() }) {
+	for (const auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::path }) {
 		bool fileMatch{ true };
 		std::bitset<3> matches;
 
-		if (searchParameters[0] && dateMatch(dirEntry)) {
-			matches[0] = true;
+		if (searchParameters[0] && dateMatch(dirEntry)){
+			matches.set(0);
 		}
 
 		if (searchParameters[1] && nameMatch(dirEntry)) {
-			matches[1] = true;
+			matches.set(1);
 		}
 
 		if (searchParameters[2] && extensionMatch(dirEntry)) {
-			matches[2] = true;
+			matches.set(2);
 		}
 
 		for (int i{ 0 }; i < matches.size(); ++i) {
@@ -60,7 +67,13 @@ void Find::find() {
 		++fileNum;
 	}
 
-	secondaryAction();
+	size_t numOfMatches{ FileManagementUnit::fileLst.size() };
+
+	std::cout << numOfMatches << " matches found." << std::endl << std::endl;
+
+	if (numOfMatches > 0) {
+		secondaryAction();
+	}
 }
 
 /*dateMatch() steps:
@@ -112,8 +125,8 @@ bool Find::dateMatch(const std::filesystem::directory_entry& dirEntry) {
 
 bool Find::nameMatch(const std::filesystem::directory_entry& dirEntry) {
 	std::regex targetReg{ "(" + targetNameSubstr + ")" };
-	std::string pathStr{ dirEntry.path().string() };
-	std::sregex_iterator currentMatch{ pathStr.begin(), pathStr.end(), targetReg };
+	std::string fileNameStr{ dirEntry.path().filename().string() };
+	std::sregex_iterator currentMatch{ fileNameStr.begin(), fileNameStr.end(), targetReg };
 
 	return currentMatch != std::sregex_iterator{};
 }
@@ -153,15 +166,15 @@ void Find::secondaryAction() {
 		break;
 	}
 	case 3: {
-		Delete deleteObj{ FileManagementUnit::path, static_cast<int>(FileManagementUnit::items), 
-			static_cast<int>(FileManagementUnit::selectivity), FileManagementUnit::fileLst };
+		Delete deleteObj{ FileManagementUnit::path, FileManagementUnit::items, 
+			FileManagementUnit::SELECTIVITY::CUSTOM, FileManagementUnit::fileLst };
 
 		deleteObj.deletion();
 		break;
 	}
 	case 4: {
-		Copy copyObj{ FileManagementUnit::path, static_cast<int>(FileManagementUnit::items), 
-			static_cast<int>(FileManagementUnit::selectivity), FileManagementUnit::fileLst };
+		Copy copyObj{ FileManagementUnit::path, FileManagementUnit::items, FileManagementUnit::SELECTIVITY::CUSTOM, 
+			FileManagementUnit::fileLst };
 
 		copyObj.copy();
 		break;
@@ -176,7 +189,10 @@ std::bitset<3> Find::determineSearchParameters() {
 	std::cout << "Please enter the IDs of all search parameters you prefer (CTRL + Z to finish):" << std::endl;
 	std::cout << "1 - Date of last modification" << std::endl;
 	std::cout << "2 - Portion of the item name" << std::endl;
-	std::cout << "3 - Extension of the item" << std::endl;
+
+	if (FileManagementUnit::items == FileManagementUnit::ITEMS::FILES) { //extension doesn't make sense when directories are involved 
+		std::cout << "3 - Extension of the item" << std::endl;
+	}
 
 	if (std::cin.peek() == '\n') {
 		std::cin.ignore();
@@ -184,7 +200,7 @@ std::bitset<3> Find::determineSearchParameters() {
 
 	int count{ 0 };
 
-	while (std::cin && count < 3) {
+	while (std::cin && count < 2 + (FileManagementUnit::items == FileManagementUnit::ITEMS::FILES)) {
 		int choice{};
 		std::cin >> choice;
 
@@ -193,7 +209,7 @@ std::bitset<3> Find::determineSearchParameters() {
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 
-		if (choice >= 1 && choice <= 3 && !searchParameters[choice - 1]) {
+		if (choice >= 1 && choice <= 2 + (FileManagementUnit::items == FileManagementUnit::ITEMS::FILES) && !searchParameters[choice - 1]) {
 			++count;
 			searchParameters.set(choice - 1);
 		}
@@ -300,7 +316,7 @@ std::string Find::determineTargetNameSubstr() {
 }
 
 std::string Find::determineTargetExtension() {
-	std::cout << "Enter target extension (\"Folder\" if you are targeting directories):" << std::endl;
+	std::cout << "Enter target extension:" << std::endl;
 	std::string targetExt;
 	std::cin >> targetExt;
 

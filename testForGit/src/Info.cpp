@@ -6,12 +6,12 @@
 #include <iostream>
 #include <string>
 
-Info::Info(std::filesystem::path path) : FileManagementUnit(path) {}
+Info::Info(std::filesystem::path path) : FileManagementUnit{ path } {}
 
 void Info::info() {
     int itemCount{ 0 };
 
-    for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::getPath() }) {
+    for (auto& dirEntry : std::filesystem::directory_iterator{ FileManagementUnit::path }) {
         if (continueDisplay[0] == 'Y' || continueDisplay[0] == 'y' || continueDisplay[0] == 'N' || continueDisplay[0] == 'n') {
 
             std::time_t lastModification{ std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(dirEntry.last_write_time()
@@ -25,9 +25,9 @@ void Info::info() {
 
             asctime_s(timeBuff, sizeof(timeBuff), &lastModificationStrct);
 
-            if ((FileManagementUnit::getItems() == FileManagementUnit::ITEMS::ALL) || 
-                (FileManagementUnit::getItems() == FileManagementUnit::ITEMS::FILES && dirEntry.is_regular_file()) ||
-                (FileManagementUnit::getItems() == FileManagementUnit::ITEMS::DIRECTORIES && dirEntry.is_directory())) {
+            if ((FileManagementUnit::items == FileManagementUnit::ITEMS::ALL) || 
+                (FileManagementUnit::items == FileManagementUnit::ITEMS::FILES && dirEntry.is_regular_file()) ||
+                (FileManagementUnit::items == FileManagementUnit::ITEMS::DIRECTORIES && dirEntry.is_directory())) {
 
                 std::cout << std::left << std::endl << std::setw(50) << "File name: " << dirEntry.path().stem().string() << std::endl;
                 std::cout << std::setw(50) << "Format: " << (dirEntry.is_directory() ? "Folder" : dirEntry.path().extension().string()) << std::endl;

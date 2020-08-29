@@ -39,16 +39,6 @@ private:
 
 public:
 	Find(const std::filesystem::path&);
-	virtual ~Find() {
-		std::cout << "File matches:" << std::endl;
-
-		for (auto fileNum : FileManagementUnit::fileLst) {
-			std::cout << fileNum << " ";
-		}
-
-		std::cout << std::endl;
-	}
 	void find();
-
 };
 #endif

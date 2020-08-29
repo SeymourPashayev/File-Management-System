@@ -8,23 +8,12 @@
 FileManagementUnit::FileManagementUnit(const std::filesystem::path& path) : path{ path }, items{ determineItems() }, 
     selectivity{ items == FileManagementUnit::ITEMS::ALL ? FileManagementUnit::SELECTIVITY::ALL : determineSelectivity() }{}
 
-FileManagementUnit::FileManagementUnit(const std::filesystem::path& path, const int selectivity) : path{ path }, items{ determineItems() },
-    selectivity{selectivity}{}
+FileManagementUnit::FileManagementUnit(const std::filesystem::path& path, const FileManagementUnit::SELECTIVITY selectivity) : 
+    path{ path }, items{ determineItems() },selectivity{selectivity}{}
 
-FileManagementUnit::FileManagementUnit(const std::filesystem::path& path, const int items, const int selectivity, 
-    const std::deque<long long>& fileLst) : path{ path }, items{ items }, selectivity{ selectivity }, fileLst{ fileLst }{}
-
-std::filesystem::path FileManagementUnit::getPath(){
-	return this->path;
-}
-
-FileManagementUnit::ITEMS FileManagementUnit::getItems() {
-    return this->items;
-}
-
-FileManagementUnit::SELECTIVITY FileManagementUnit::getSelectivity() {
-    return this->selectivity;
-}
+FileManagementUnit::FileManagementUnit(const std::filesystem::path& path, const FileManagementUnit::ITEMS items, 
+    const FileManagementUnit::SELECTIVITY selectivity, const std::deque<long long>& fileLst) :
+    path{ path }, items{ items }, selectivity{ selectivity }, fileLst{ fileLst }{}
 
 FileManagementUnit::ITEMS FileManagementUnit::determineItems() {
     std::cout << std::endl << std::setw(50) << "Type of the items:" << std::endl;
@@ -141,6 +130,4 @@ void FileManagementUnit::displayItems(std::vector<long long>& allFiles, std::deq
     itemLstOutput.clear();
 }
 
-void FileManagementUnit::pushIntoFileLst(long long fileNum) {
-    fileLst.push_back(fileNum);
-}
+
