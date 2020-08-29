@@ -23,18 +23,22 @@ void Rename::rename()
 			std::filesystem::path dirEntryPath{ dirEntry.path() };
 			std::cout << std::endl << dirEntryPath << "    ";
 
+			std::string ext = dirEntryPath.extension().string();
+			std::cout << "this is the ext: " << ext << std::endl;
+			dirEntryPath.replace_filename("");
+
 			// Add the leading zeroes to the new name.
 			
-			/*int numOfZeroesToRemove = zeroesToRemove(fileNum);
+			int numOfZeroesToRemove = zeroesToRemove(fileNum);
 			while (numOfZeroesToRemove > 0 && !leadingZeroes.empty()) {
 				leadingZeroes.pop_back();
 				numOfZeroesToRemove--;
-			}*/
+			}
 
 			std::string renameTo = leadingZeroes + std::to_string(fileNum) + "" + newName;
 			std::cout << renameTo << "    ";
 			// Add the file extensions back to the newName.
-			renameTo += dirEntryPath.extension().string();
+			renameTo += ext;
 			std::cout << renameTo << "      ";
 
 			// Create the final path with the new name
@@ -130,7 +134,7 @@ Rename::RENAME_NEW_NAME Rename::setNewNameSelectivity() {
 // @Output: std::size_t number of files in a directory.
 std::size_t Rename::getNumFilesInDir(std::filesystem::path pathToCheck)
 {
-	using std::filesystem::directory_iterator;
-	using fp = bool (*)(const std::filesystem::path&);
-	return std::count_if(directory_iterator(pathToCheck), directory_iterator{}, (fp)std::filesystem::is_regular_file);
+	auto isRegularFile{ [](auto pathToCheck) { return std::filesystem::is_regular_file(pathToCheck); } };
+
+	return std::count_if(std::filesystem::directory_iterator{ pathToCheck }, std::filesystem::directory_iterator{}, isRegularFile);
 }
