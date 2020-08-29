@@ -7,9 +7,12 @@
 #include <deque>
 #include <algorithm>
 
-Delete::Delete(std::filesystem::path& path) : FileManagementUnit(path) {}
+Delete::Delete(const std::filesystem::path& path) : FileManagementUnit{ path } {}
 
-void Delete::deletion() {
+Delete::Delete(const std::filesystem::path& path, const int items, const int selectivity, const std::deque<long long>& fileLst) : 
+    FileManagementUnit{path, items, selectivity, fileLst}{}
+
+void Delete::deletion() { //NOT INTEGRATED WITH Find
 	switch (FileManagementUnit::getItems()) {
 
     case FileManagementUnit::ITEMS::ALL: {

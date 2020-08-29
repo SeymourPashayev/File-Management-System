@@ -15,19 +15,22 @@ protected:
 	ITEMS items;
 	SELECTIVITY selectivity;
 	std::filesystem::path path;
+	std::deque<long long> fileLst;
 
 	ITEMS determineItems();
 	SELECTIVITY determineSelectivity();
+
+	std::filesystem::path getPath();
+	ITEMS getItems();
+	SELECTIVITY getSelectivity();
 
 	std::deque<long long> selectItems();
 	void displayItems(std::vector<long long>&, std::deque<long long>&, std::ostringstream&);
 
 public:
-	FileManagementUnit(std::filesystem::path);
+	FileManagementUnit(const std::filesystem::path&);
+	FileManagementUnit(const std::filesystem::path&, const int); //ctor to set SELECTIVITY to ALL w/o user, needed in Find
+	FileManagementUnit(const std::filesystem::path&, const int, const int, const std::deque<long long>&); 
 	virtual ~FileManagementUnit() = default;
-
-	std::filesystem::path getPath();
-	ITEMS getItems();
-	SELECTIVITY getSelectivity();
 };
 #endif 

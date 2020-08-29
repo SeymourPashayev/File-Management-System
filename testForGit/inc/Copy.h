@@ -22,7 +22,8 @@ private:
 	std::string regexStrParser(std::string);
 
 public:
-	Copy(std::filesystem::path&);
+	Copy(const std::filesystem::path&);
+	Copy(const std::filesystem::path&, const int, const int, const std::deque<long long>&);
 	void copy();
 };
 #endif

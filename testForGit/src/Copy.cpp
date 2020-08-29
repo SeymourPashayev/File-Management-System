@@ -8,10 +8,12 @@
 #include <algorithm>
 #include <regex>
 
-Copy::Copy(std::filesystem::path& pathFrom) : FileManagementUnit(pathFrom) {
-    this->pathTo = determineTargetDirectory();
-    this->nameConflictResolution = determineNameConflictResolution();
-}
+Copy::Copy(const std::filesystem::path& pathFrom) : 
+    FileManagementUnit{ pathFrom }, pathTo{ determineTargetDirectory() }, nameConflictResolution{ determineNameConflictResolution() } {}
+
+Copy::Copy(const std::filesystem::path& pathFrom, const int items, const int selectivity, const std::deque<long long>& fileLst):
+    FileManagementUnit{pathFrom, items, selectivity, fileLst}, 
+    pathTo{ determineTargetDirectory() }, nameConflictResolution{ determineNameConflictResolution() }{}
 
 void Copy::copy() {
     std::filesystem::copy_options cpyOpt{ std::filesystem::copy_options::skip_existing };

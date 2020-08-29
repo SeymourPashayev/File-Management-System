@@ -12,7 +12,8 @@ private:
 	void deleteDirectories();
 
 public:
-	Delete(std::filesystem::path& path);
+	Delete(const std::filesystem::path&);
+	Delete(const std::filesystem::path&, const int, const int, const std::deque<long long>&);
 	void deletion();
 };
 #endif

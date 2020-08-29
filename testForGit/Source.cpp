@@ -7,6 +7,7 @@
 #include "Delete.h"
 #include "Rename.h"
 #include "Info.h"
+#include "Find.h"
 #include "FileManagementUnit.h"
 
 enum class CHOICE { NEW = 1, RENAME, DELETE, INFO, COPY, FIND, END };
@@ -54,9 +55,15 @@ int main() {
         }
 
         case CHOICE::FIND: {
+            Find findObj{ pathFrom };
+            findObj.find();
             break;
         }
 
+        }
+
+        if (std::cin.eof()) {
+            std::cin.clear();
         }
 
         choice = static_cast<CHOICE>(menu());

@@ -5,13 +5,16 @@
 #include <deque>
 #include <sstream>
 
-FileManagementUnit::FileManagementUnit(std::filesystem::path path) {
-	this->path = path;
-	this->items = determineItems();
-	this->selectivity = (items == FileManagementUnit::ITEMS::ALL ? FileManagementUnit::SELECTIVITY::ALL : determineSelectivity());
-}
+FileManagementUnit::FileManagementUnit(const std::filesystem::path& path) : path{ path }, items{ determineItems() }, 
+    selectivity{ items == FileManagementUnit::ITEMS::ALL ? FileManagementUnit::SELECTIVITY::ALL : determineSelectivity() }{}
 
-std::filesystem::path FileManagementUnit::getPath() {
+FileManagementUnit::FileManagementUnit(const std::filesystem::path& path, const int selectivity) : path{ path }, items{ determineItems() },
+    selectivity{selectivity}{}
+
+FileManagementUnit::FileManagementUnit(const std::filesystem::path& path, const int items, const int selectivity, 
+    const std::deque<long long>& fileLst) : path{ path }, items{ items }, selectivity{ selectivity }, fileLst{ fileLst }{}
+
+std::filesystem::path FileManagementUnit::getPath(){
 	return this->path;
 }
 
@@ -136,4 +139,8 @@ void FileManagementUnit::displayItems(std::vector<long long>& allFiles, std::deq
     allFiles.clear();
     itemLstOutput.str("");
     itemLstOutput.clear();
+}
+
+void FileManagementUnit::pushIntoFileLst(long long fileNum) {
+    fileLst.push_back(fileNum);
 }
