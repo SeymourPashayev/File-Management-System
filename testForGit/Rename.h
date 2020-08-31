@@ -22,7 +22,6 @@ private:
 	// Getters.
 	std::size_t getNumFilesInDir(std::filesystem::path);
 	int zeroesToRemove(int);
-	
 
 public:
 

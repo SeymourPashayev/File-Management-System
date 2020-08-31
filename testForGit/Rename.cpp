@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <string>
 #include <iostream>
-
+#include <random>
 // Constructor
 Rename::Rename(std::filesystem::path& pathTo) {
 	this->path = pathTo;
@@ -43,11 +43,19 @@ void Rename::rename()
 			std::cout << newPath << std::endl << std::endl;                           //how about using dirEntryPath directly?
 
 			// Rename the file
+			if (dirEntry.path().string() != newPath.string() && std::filesystem::exists(newPath)) {
+				int secondaryFileNum{ fileNum + 1 };
+				--fileNum;
+
+				while (dirEntry.path().string() != newPath.string() && std::filesystem::exists(newPath)) {
+					newPath.replace_filename(leadingZeroes + std::to_string(secondaryFileNum) + newName + newPath.extension().string());
+					++secondaryFileNum;
+				}
+			}
+
 			std::filesystem::rename(dirEntry, newPath);
 
 			++fileNum;
-
-			
 		}
 	}
 
@@ -139,3 +147,4 @@ std::size_t Rename::getNumFilesInDir(std::filesystem::path pathToCheck)
 	auto isRegularFile{ [](auto pathToCheck) {return std::filesystem::is_regular_file(pathToCheck); } };
 	return std::count_if(std::filesystem::directory_iterator(pathToCheck), std::filesystem::directory_iterator{}, isRegularFile);
 }
+
