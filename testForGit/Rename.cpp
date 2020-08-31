@@ -21,7 +21,6 @@ void Rename::rename()
 			
 			// Turn dirEntry into a path format.
 			std::filesystem::path dirEntryPath{ dirEntry.path() };
-			std::cout << std::endl << dirEntryPath << "    ";
 
 			// Add the leading zeroes to the new name.
 			
@@ -32,15 +31,13 @@ void Rename::rename()
 			}*/
 
 			std::string renameTo{ leadingZeroes + std::to_string(fileNum) + newName };
-			std::cout << renameTo << "    ";
+
 			// Add the file extensions back to the newName.
 			renameTo += dirEntryPath.extension().string();
-			std::cout << renameTo << "      ";
 
 			// Create the final path with the new name
 			std::filesystem::path newPath{ dirEntryPath.replace_filename(renameTo) }; //RAUL: replace_filename works on the caller object
-			                                                                          //so dirEntryPath and newPath are the same.
-			std::cout << newPath << std::endl << std::endl;                           //how about using dirEntryPath directly?
+			                                                                          //so dirEntryPath and newPath are the same.                           //how about using dirEntryPath directly?
 
 			// Rename the file
 			if (dirEntry.path().string() != newPath.string() && std::filesystem::exists(newPath)) {
@@ -72,7 +69,7 @@ std::string Rename::setNumLeadingZeroes(std::size_t numFilesInDir)
 	std::string zeroes;
 	while (numFilesInDir >= 10) {
 		zeroes += "0";
-		numFilesInDir /= 10; //RAUL: changed %= to /=
+		numFilesInDir %= 10;
 	}
 
 	return zeroes;
