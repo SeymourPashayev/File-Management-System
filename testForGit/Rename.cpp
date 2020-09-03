@@ -24,7 +24,7 @@ void Rename::rename()
 
 			// Add the leading zeroes to the new name.
 			
-			/*int numOfZeroesToRemove = zeroesToRemove(fileNum);
+		    /*int numOfZeroesToRemove = zeroesToRemove(fileNum);
 			while (numOfZeroesToRemove > 0 && !leadingZeroes.empty()) {
 				leadingZeroes.pop_back();
 				numOfZeroesToRemove--;
@@ -69,7 +69,7 @@ std::string Rename::setNumLeadingZeroes(std::size_t numFilesInDir)
 	std::string zeroes;
 	while (numFilesInDir >= 10) {
 		zeroes += "0";
-		numFilesInDir %= 10;
+		numFilesInDir /= 10;
 	}
 
 	return zeroes;
