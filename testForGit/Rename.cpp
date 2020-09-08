@@ -3,60 +3,62 @@
 #include <string>
 #include <iostream>
 #include <random>
+#include <list>
+
 // Constructor
 Rename::Rename(std::filesystem::path& pathTo) {
 	this->path = pathTo;
-	this->renameNewNameSelectivity = setNewNameSelectivity();
-	this->newName = ((renameNewNameSelectivity == Rename::RENAME_NEW_NAME::YES) ? setNewName() : "");
-	this->leadingZeroes = setNumLeadingZeroes(getNumFilesInDir(path));
+	this->newName = setNewName();
 }
 
 // Driver function.
 void Rename::rename()
 {
-	int fileNum{ 1 };
-
+	// Iterate through the list of items and rename them to random strings of length 12.
 	for (auto& dirEntry : std::filesystem::directory_iterator{ path }) {
 		if (dirEntry.is_regular_file()) {
-			
-			// Turn dirEntry into a path format.
-			std::filesystem::path dirEntryPath{ dirEntry.path() };
-
-			// Add the leading zeroes to the new name.
-			
-		    /*int numOfZeroesToRemove = zeroesToRemove(fileNum);
-			while (numOfZeroesToRemove > 0 && !leadingZeroes.empty()) {
-				leadingZeroes.pop_back();
-				numOfZeroesToRemove--;
-			}*/
-
-			std::string renameTo{ leadingZeroes + std::to_string(fileNum) + newName };
-
-			// Add the file extensions back to the newName.
-			renameTo += dirEntryPath.extension().string();
-
-			// Create the final path with the new name
-			std::filesystem::path newPath{ dirEntryPath.replace_filename(renameTo) }; //RAUL: replace_filename works on the caller object
-			                                                                          //so dirEntryPath and newPath are the same.                           //how about using dirEntryPath directly?
-
-			// Rename the file
-			if (dirEntry.path().string() != newPath.string() && std::filesystem::exists(newPath)) {
-				int secondaryFileNum{ fileNum + 1 };
-				--fileNum;
-
-				while (dirEntry.path().string() != newPath.string() && std::filesystem::exists(newPath)) {
-					newPath.replace_filename(leadingZeroes + std::to_string(secondaryFileNum) + newName + newPath.extension().string());
-					++secondaryFileNum;
-				}
-			}
-
-			std::filesystem::rename(dirEntry, newPath);
-
-			++fileNum;
+			std::filesystem::path dirEntryNewPath{ dirEntry };
+			dirEntryNewPath.replace_filename(renameRandom() + dirEntryNewPath.extension().string());
+			// Add the renamed files to the linked list.
+			std::filesystem::rename(dirEntry.path(), dirEntryNewPath);
+			listOfPaths.push_back(dirEntryNewPath);
 		}
 	}
 
+	// Retrieve the renamed files from the linked list to rename them in order.
+	int fileNum{ 1 };
+
+	for (std::filesystem::path dirEntry : listOfPaths) {
+		if (std::filesystem::exists(dirEntry)) {
+			std::filesystem::path dirEntryNewPath{ dirEntry };
+			dirEntryNewPath.replace_filename(setNumLeadingZeroes(getNumFilesInDir(path), fileNum) + std::to_string(fileNum) + " " + newName + dirEntryNewPath.extension().string());
+			std::filesystem::rename(dirEntry, dirEntryNewPath);
+			++fileNum;
+		}
+	}
 }
+// Creates a random string of length 12
+std::string Rename::renameRandom() {
+	
+	int length = 12;
+	
+	static auto& chrs = "0123456789"
+		"abcdefghijklmnopqrstuvwxyz"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	thread_local static std::mt19937 rg{ std::random_device{}() };
+	thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
+
+	std::string s;
+
+	s.reserve(length);
+
+	while (length--)
+		s += chrs[pick(rg)];
+
+	return s;
+}
+
 
 //---------//
 // Setters //
@@ -64,32 +66,33 @@ void Rename::rename()
 
 
 // Sets the number of leading zeroes
-std::string Rename::setNumLeadingZeroes(std::size_t numFilesInDir)
+std::string Rename::setNumLeadingZeroes(std::size_t numFilesInDir, int fileNum)
 {
 	std::string zeroes;
-	while (numFilesInDir >= 10) {
-		zeroes += "0";
+	int numFilesInDirIterator = 0;
+	int fileNumIterator = 0;
+
+	while (numFilesInDir >= 10){
+		numFilesInDirIterator++;
 		numFilesInDir /= 10;
 	}
+
+	while (fileNum >= 10) {
+		fileNumIterator++;
+		fileNum /= 10;
+	}
+	
+	//std::cout << "numFilesInDir: " << numFilesInDir << " FileNum: " << fileNum << std::endl;
+
+	zeroes = std::string((numFilesInDirIterator - fileNumIterator),'0');
 
 	return zeroes;
 }
 
-// Helps find the number of zeroes to be removed form the current fileNum.
-int Rename::zeroesToRemove(int fileNum) {
-	int numToRemove = 0;
-
-	while (fileNum >= 10) {
-		++numToRemove;
-		fileNum /= 10; //RAUL: changed %= to /=
-	}
-
-	return numToRemove;
-}
 
 // Prompts user for a new name
 std::string Rename::setNewName() {
-	std::cout << std::endl << std::setw(50) << "Input name:" << std::endl;
+	std::cout << std::endl << std::setw(50) << "Input new name:" << std::endl;
 
 	if (std::cin.peek() == '\n') {
 		std::cin.ignore();
@@ -102,32 +105,6 @@ std::string Rename::setNewName() {
 }
 
 
-// Prompts user to answer whether they want a new name or not.
-Rename::RENAME_NEW_NAME Rename::setNewNameSelectivity() {
-	std::cout << std::endl << std::setw(50) << "Do you want to name your files?" << std::endl;
-	std::cout << std::setw(50) << "1 - Yes." << std::endl;
-	std::cout << std::setw(50) << "2 - No." << std::endl;
-
-	int selectivity;
-	std::cin >> selectivity;
-
-	if (!std::cin.good()) {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}
-
-	while (selectivity < 1 || selectivity > 2) {
-		std::cerr << "Invalid input. Enter an integer 1 - 2 ." << std::endl;
-		std::cin >> selectivity;
-
-		if (!std::cin.good()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		}
-	}
-
-	return static_cast<Rename::RENAME_NEW_NAME>(selectivity);
-}
 //---------//
 // Getters //
 //---------//

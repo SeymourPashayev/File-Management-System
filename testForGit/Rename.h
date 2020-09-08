@@ -1,6 +1,7 @@
 #pragma once
 #include <filesystem>
 #include <string>
+#include <list>
 
 class Rename
 {
@@ -11,17 +12,15 @@ private:
 	// Intstance variables.
 	std::filesystem::path path;
 	std::string newName;
-	std::string leadingZeroes;
-	RENAME_NEW_NAME renameNewNameSelectivity;
+	std::list<std::filesystem::path> listOfPaths;
 
 	// Setters.
-	RENAME_NEW_NAME setNewNameSelectivity();
 	std::string setNewName();
-	std::string setNumLeadingZeroes(std::size_t);
+	std::string setNumLeadingZeroes(std::size_t, int);
+	std::string renameRandom();
 
 	// Getters.
 	std::size_t getNumFilesInDir(std::filesystem::path);
-	int zeroesToRemove(int);
 
 public:
 
