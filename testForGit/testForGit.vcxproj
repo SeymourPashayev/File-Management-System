@@ -24,16 +24,16 @@
     <ClInclude Include="inc\Delete.h" />
     <ClInclude Include="inc\FileManagementUnit.h" />
     <ClInclude Include="inc\Info.h" />
-    <ClInclude Include="inc\Rename.h" />
+    <ClInclude Include="Rename.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Rename.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="src\Copy.cpp" />
     <ClCompile Include="src\CreateNew.cpp" />
     <ClCompile Include="src\Delete.cpp" />
     <ClCompile Include="src\FileManagementUnit.cpp" />
     <ClCompile Include="src\Info.cpp" />
-    <ClCompile Include="src\Rename.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -106,12 +106,20 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+<<<<<<< HEAD
       <AdditionalIncludeDirectories>C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\inc;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit;C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\inc;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit;C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> Fixing-Some-FIXMEs-Aug
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+<<<<<<< HEAD
       <AdditionalLibraryDirectories>C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\inc;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+=======
+      <AdditionalLibraryDirectories>C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\inc;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src;C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit;C:\Users\Raul\source\repos\File-Management-System\testForGit\inc;C:\Users\Raul\source\repos\File-Management-System\testForGit\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+>>>>>>> Fixing-Some-FIXMEs-Aug
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
