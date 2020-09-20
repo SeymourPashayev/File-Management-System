@@ -1,10 +1,9 @@
-﻿  Source.cpp
+﻿  Rename.cpp
+  Source.cpp
   Copy.cpp
   CreateNew.cpp
   Delete.cpp
   FileManagementUnit.cpp
   Info.cpp
-  Rename.cpp
-C:\Users\Raul Abdullayev\source\repos\SeymourPashayev\File-Management-System\testForGit\src\Rename.cpp(170,9): warning C4834: discarding return value of function with 'nodiscard' attribute
   Generating Code...
-  testForGit.vcxproj -> C:\Users\Raul Abdullayev\Source\Repos\SeymourPashayev\File-Management-System\testForGit\Debug\testForGit.exe
+  testForGit.vcxproj -> C:\Users\Seymour\Documents\GitHub\File-Management-System\testForGit\Debug\testForGit.exe

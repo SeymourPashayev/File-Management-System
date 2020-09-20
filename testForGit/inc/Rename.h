@@ -1,38 +1,31 @@
 #pragma once
 #include <filesystem>
 #include <string>
+#include <list>
 
 class Rename
 {
 private:
-	// Enum classes for selection during the runtime
-	enum class RENAME_SELECTIVITY { ALL_HERE = 1, ALL_INCL_SUBDIR, CUSTOM };
-	enum class RENAME_KEEP_ORIG_TEXT { YES = 1, NO };
-	enum class RENAME_STYLE_SELECTIVITY { PLAIN_NUMBERS = 1, LEADING_ZERO };
+	// Enum classes for selectivity.
+	enum class RENAME_NEW_NAME { YES = 1, NO };
 
-	// Instance Variables
-	RENAME_SELECTIVITY renameSelectivity;
-	RENAME_STYLE_SELECTIVITY renameStyle;
-	RENAME_KEEP_ORIG_TEXT keepOrigText;
-	std::string renameTo;
+	// Intstance variables.
 	std::filesystem::path path;
+	std::string newName;
+	std::list<std::filesystem::path> listOfPaths;
 
-	//Helper functions
-	void renameCore(int, std::string);
-	void renameHere();
-	//void renameRecursive();
-	//void renameCustom();
+	// Setters.
+	std::string setNewName();
+	std::string setNumLeadingZeroes(std::size_t, int);
+	std::string renameRandom();
 
-	// Checkers
-	RENAME_SELECTIVITY determineRenameSelectivity();
-	RENAME_STYLE_SELECTIVITY determineRenameStyle();
-	RENAME_KEEP_ORIG_TEXT determineKeepOrigText();
-	std::string determineAddNewName();
-	std::size_t number_of_files_in_directory(std::filesystem::path);
+	// Getters.
+	std::size_t getNumFilesInDir(std::filesystem::path);
 
 public:
 
 	Rename(std::filesystem::path&);
 	void rename();
+
 };
 

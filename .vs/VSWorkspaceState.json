@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\testForGit",
-    "\\testForGit\\src"
+    "\\testForGit"
   ],
-  "SelectedNode": "\\testForGit\\Source.cpp",
+  "SelectedNode": "\\testForGit\\testForGit.vcxproj",
   "PreviewInSolutionExplorer": false
 }
